@@ -1,0 +1,29 @@
+// ignore: file_names
+
+import 'package:flutter/cupertino.dart' show Navigator;
+import 'package:flutter/material.dart' show BuildContext, FormState;
+import 'package:flutter/widgets.dart' show GlobalKey;
+
+class Funcs {
+  verification(
+    Map<String, GlobalKey<FormState>> formkeys_,
+    String name,
+    String password,
+    BuildContext context,
+  ) async {
+    int controler = 0;
+
+    for (var key in formkeys_.values) {
+      if (!(key.currentState?.validate() ?? false)) {
+        return false;
+      } else {
+        controler = controler + 1;
+      }
+    }
+    if (controler == formkeys_.length) {
+      // await ModelDatabase.instance.database;
+      // await ModelDatabase.instance.inserirContato(newModel);
+      Navigator.pushReplacementNamed(context, "/home");
+    }
+  }
+}
