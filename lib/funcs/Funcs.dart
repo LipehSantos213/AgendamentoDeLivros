@@ -21,8 +21,6 @@ class Funcs {
       }
     }
     if (controler == formkeys_.length) {
-      // await ModelDatabase.instance.database;
-      // await ModelDatabase.instance.inserirContato(newModel);
       Navigator.pushReplacementNamed(context, "/home");
     }
   }

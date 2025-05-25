@@ -151,11 +151,11 @@ class _HomeScreenState extends State<HomeScreen> {
             var map = listaDeGruposDePessoas[index];
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  "/verificationPerson",
-                  arguments: map["pessoas"],
-                );
+                // Navigator.pushNamed(
+                //   context,
+                //   "/verificationPerson",
+                //   arguments: map["pessoas"],
+                // );
               },
               child: Card(
                 child: Padding(

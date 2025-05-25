@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class DrawerCustom extends StatefulWidget {
   final String nameUser;
@@ -39,7 +40,42 @@ class _DrawerCustomState extends State<DrawerCustom> {
             accountEmail: null,
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app_outlined, color: Colors.red),
+            leading: Icon(LucideIcons.bookMarked400, size: 24),
+            title: Text(
+              "Adicionar Um Novo Livro",
+              style: TextStyle(fontSize: 14.4),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, "/registernewbook");
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.group_sharp, size: 24),
+            title: Text(
+              "Adicionar Um Novo Grupo",
+              style: TextStyle(fontSize: 14.4),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, "/registernewgroup");
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.library_books_outlined, size: 24),
+            title: Text(
+              "Visualizar Livros Da Biblioteca",
+              style: TextStyle(fontSize: 14),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, "/viewlibrary");
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(
+              Icons.exit_to_app_outlined,
+              color: Colors.red,
+              size: 24,
+            ),
             title: Text("Sair"),
             onTap: () {
               Navigator.pushReplacementNamed(context, "/login");

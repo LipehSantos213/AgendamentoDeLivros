@@ -1,6 +1,8 @@
 import 'package:agenda_de_livros/views/HomeScreen.dart';
 import 'package:agenda_de_livros/views/LoginScreen.dart';
-import 'package:agenda_de_livros/views/PeopleViewingScreen.dart';
+import 'package:agenda_de_livros/views/RegisterNewBookScreen.dart';
+import 'package:agenda_de_livros/views/RegisterNewGroupScreen.dart';
+import 'package:agenda_de_livros/views/ViewLibraryScreen.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +16,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return ShadApp();
     return ShadApp.custom(
       themeMode: ThemeMode.light,
       darkTheme: ShadThemeData(
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
       appBuilder: (context) {
         return MaterialApp(
           theme: Theme.of(context),
-
           builder: (context, child) {
             return ShadAppBuilder(child: child!);
           },
@@ -33,7 +33,9 @@ class MyApp extends StatelessWidget {
           routes: {
             "/login": (context) => LoginScreen(),
             "/home": (context) => HomeScreen(),
-            "/verificationPerson": (context) => PeopleViewingScreen(),
+            "/registernewbook": (context) => RegisterNewBookScreen(),
+            "/registernewgroup": (context) => RegisterNewGroupScreen(),
+            "/viewlibrary": (context) => ViewLibraryScreen(),
           },
         );
       },

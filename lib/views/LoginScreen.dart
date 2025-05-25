@@ -35,8 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _valueAccessAccount = false;
   @override
   Widget build(BuildContext context) {
-    double tamanhoStatusBar = MediaQuery.of(context).padding.top;
-    double tamanhoAppBar = kToolbarHeight;
+    // double tamanhoStatusBar = MediaQuery.of(context).padding.top;
+    // double tamanhoAppBar = kToolbarHeight;
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -46,10 +46,21 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: EdgeInsets.all(16.0),
             child: Column(
               children: [
-                SizedBox(height: tamanhoAppBar + tamanhoStatusBar),
-                Text(
-                  "Ola, Tudo Bem ?",
-                  style: ShadTheme.of(context).textTheme.h1Large,
+                // SizedBox(height: tamanhoAppBar + tamanhoStatusBar ),
+                Column(
+                  children: [
+                    Image.asset(
+                      "assets/images/book.png",
+                      width: 200,
+                      height: 185,
+                    ),
+                    Text(
+                      "Ola, Tudo Bem ?",
+                      style: ShadTheme.of(
+                        context,
+                      ).textTheme.h1.copyWith(fontSize: 40),
+                    ),
+                  ],
                 ),
                 buildSizedBoxFixedCustom(),
                 TextFormText(
