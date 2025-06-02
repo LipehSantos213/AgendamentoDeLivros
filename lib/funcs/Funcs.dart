@@ -24,4 +24,18 @@ class Funcs {
       Navigator.pushReplacementNamed(context, "/home");
     }
   }
+
+  clickButtonScreenNewBook(
+    Map<String, GlobalKey<FormState>> formkeys,
+    BuildContext context,
+  ) {
+    int controller = 0;
+    for (var key in formkeys.values) {
+      if (!(key.currentState?.validate() ?? false)) {
+        return false;
+      } else {
+        controller = controller + 1;
+      }
+    }
+  }
 }

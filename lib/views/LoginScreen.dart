@@ -143,7 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         context,
                       );
                     },
-                    style: ElevatedButton.styleFrom(),
                     child: Text("Entrar/Acessar"),
                   ),
                 ),
