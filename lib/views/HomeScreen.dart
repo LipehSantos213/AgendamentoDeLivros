@@ -30,44 +30,37 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text("Filtrar por:"),
-                  ShadSelect<String>(
-                    placeholder: Text("Filtrar"),
-                    options: [
-                      Padding(padding: const EdgeInsets.fromLTRB(32, 6, 6, 6)),
-                      ...filter.entries.map(
-                        (e) => ShadOption(value: e.key, child: Text(e.value)),
-                      ),
-                    ],
-                    selectedOptionBuilder:
-                        (context, value) => Text(filter[value]!),
-                  ),
-                ],
-              ),
-              build_ListGroupPeople(context),
-            ],
+            children: [buildRowFilter(), buildListGroupPeople(context)],
           ),
         ),
       ),
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Widget build_ListGroupPeople(BuildContext context) {
+  Widget buildRowFilter() {
+    return Row(
+      children: [
+        Text("Filtrar por:"),
+        ShadSelect<String>(
+          placeholder: Text("Filtrar"),
+          options: [
+            Padding(padding: const EdgeInsets.fromLTRB(32, 6, 6, 6)),
+            ...filter.entries.map(
+              (e) => ShadOption(value: e.key, child: Text(e.value)),
+            ),
+          ],
+          selectedOptionBuilder: (context, value) => Text(filter[value]!),
+        ),
+      ],
+    );
+  }
+
+  Widget buildListGroupPeople(BuildContext context) {
     return Column(
       children: List.generate(DadosFicticios.listaGroupPeople.length, (index) {
         var map = DadosFicticios.listaGroupPeople[index];
         return GestureDetector(
-          onTap: () {
-            // Navigator.pushNamed(
-            //   context,
-            //   "/verificationPerson",
-            //   arguments: map["pessoas"],
-            // );
-          },
+          onTap: () {},
           child: Card(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -132,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               ShadButton.ghost(
                                 onPressed: () {
-                                  _onClickButtonEdit(
+                                  onClickButtonEdit(
                                     context,
                                     "${map["nome do grupo"]}",
                                   );
@@ -176,6 +169,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SizedBox buildSizedBoxWidthCustom() => SizedBox(width: 10);
-  void _onClickButtonEdit(BuildContext context, String nameGroup) {}
+  Widget buildSizedBoxWidthCustom() => SizedBox(width: 10);
+  void onClickButtonEdit(BuildContext context, String nameGroup) {}
 }

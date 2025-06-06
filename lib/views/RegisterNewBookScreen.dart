@@ -1,4 +1,5 @@
 // import 'package:flutter/cupertino.dart';
+
 import 'package:agenda_de_livros/funcs/Funcs.dart';
 import 'package:agenda_de_livros/widgets/TextFormText.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     "nameAuthor": TextEditingController(),
     "genreBook": TextEditingController(),
     "quantifyBook": TextEditingController(),
+    "publisher": TextEditingController(),
+    "publicationYear": TextEditingController(),
     "controllerExemplar1": TextEditingController(),
   };
   final Map<String, GlobalKey<FormState>> formkeys = {
@@ -23,6 +26,8 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     "nameAuthor": GlobalKey<FormState>(),
     "genreBook": GlobalKey<FormState>(),
     "quantifyBook": GlobalKey<FormState>(),
+    "publisher": GlobalKey<FormState>(),
+    "publicationYear": GlobalKey<FormState>(),
     "formkeyExemplar1": GlobalKey<FormState>(),
   };
   final genre = {
@@ -48,8 +53,8 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     String lastElementFormkeys = formkeys.keys.toList().elementAt(
       formkeys.keys.toList().length - 1,
     );
-    if (lastElemetController != formkeys.keys.toList()[4] &&
-        lastElementFormkeys != formkeys.keys.toList()[4]) {
+    if (lastElemetController != formkeys.keys.toList()[6] &&
+        lastElementFormkeys != formkeys.keys.toList()[6]) {
       controllers.remove(lastElemetController);
       formkeys.remove(lastElementFormkeys);
     }
@@ -74,24 +79,24 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
           padding: EdgeInsets.all(12),
           child: Column(
             children: [
-              _buildRowCustomWithElement(
+              buildRowCustomWithElement(
                 TextFormText(
                   controller: controllers["nameBook"],
-                  label: "Nome Do Livro",
-                  hint: "nome do livro",
+                  label: "Titulo",
+                  hint: "titulo",
                   prefixIcon: Icons.bookmark_add_rounded,
                   formkey: formkeys["nameBook"],
                 ),
                 TextFormText(
                   controller: controllers["nameAuthor"],
-                  label: "Nome Do Autor",
-                  hint: "nome do autor",
+                  label: "Autor",
+                  hint: "autor",
                   prefixIcon: Icons.account_box_sharp,
                   formkey: formkeys["nameAuthor"],
                 ),
               ),
-              _buildSizedBoxCustom(),
-              _buildRowCustomWithElement(
+              buildSizedBoxCustom(),
+              buildRowCustomWithElement(
                 TextFormText(
                   controller: controllers["genreBook"],
                   label: "Gênero",
@@ -105,6 +110,23 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
                   hint: "quantidade",
                   prefixIcon: Icons.apple_outlined,
                   formkey: formkeys["quantifyBook"],
+                ),
+              ),
+              buildSizedBoxCustom(),
+              buildRowCustomWithElement(
+                TextFormText(
+                  controller: controllers["publisher"],
+                  label: "Editora",
+                  hint: "editora",
+                  prefixIcon: Icons.apple,
+                  formkey: formkeys["publisher"],
+                ),
+                TextFormText(
+                  controller: controllers["publicationYear"],
+                  label: "Ano Publicacão",
+                  hint: "ano",
+                  prefixIcon: Icons.currency_yuan_rounded,
+                  formkey: formkeys["publicationYear"],
                 ),
               ),
               ListTile(
@@ -202,15 +224,15 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     );
   }
 
-  Widget _buildRowCustomWithElement(Widget firstElement, Widget secundElemet) {
+  Widget buildRowCustomWithElement(Widget firstElement, Widget secundElemet) {
     return Row(
       children: [
         Expanded(flex: 2, child: firstElement),
-        _buildSizedBoxCustom(),
+        buildSizedBoxCustom(),
         Expanded(flex: 2, child: secundElemet),
       ],
     );
   }
 
-  Widget _buildSizedBoxCustom() => SizedBox(width: 10, height: 20);
+  Widget buildSizedBoxCustom() => SizedBox(width: 10, height: 20);
 }

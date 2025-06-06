@@ -41,12 +41,10 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-
           child: SingleChildScrollView(
             padding: EdgeInsets.all(16.0),
             child: Column(
               children: [
-                // SizedBox(height: tamanhoAppBar + tamanhoStatusBar ),
                 Column(
                   children: [
                     Image.asset(
@@ -80,41 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true,
                 ),
                 buildSizedBoxFixedCustom(),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: ListTile(
-                        leading: Checkbox(
-                          value: _valueCreateAccount,
-                          onChanged: (value) {
-                            setState(() {
-                              _valueCreateAccount = true;
-                              _valueAccessAccount = false;
-                            });
-                          },
-                        ),
-
-                        title: Text("Criar Conta"),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: ListTile(
-                        leading: Checkbox(
-                          value: _valueAccessAccount,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _valueAccessAccount = true;
-                              _valueCreateAccount = false;
-                            });
-                          },
-                        ),
-                        title: Text("Acessar Conta"),
-                      ),
-                    ),
-                  ],
-                ),
+                buildRowCheckBox(),
                 buildSizedBoxFixedCustom(),
                 Column(
                   children: [
@@ -154,5 +118,43 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  SizedBox buildSizedBoxFixedCustom() => SizedBox(height: 19);
+  Widget buildRowCheckBox() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: ListTile(
+            leading: Checkbox(
+              value: _valueCreateAccount,
+              onChanged: (value) {
+                setState(() {
+                  _valueCreateAccount = true;
+                  _valueAccessAccount = false;
+                });
+              },
+            ),
+
+            title: Text("Criar Conta"),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: ListTile(
+            leading: Checkbox(
+              value: _valueAccessAccount,
+              onChanged: (bool? value) {
+                setState(() {
+                  _valueAccessAccount = true;
+                  _valueCreateAccount = false;
+                });
+              },
+            ),
+            title: Text("Acessar Conta"),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildSizedBoxFixedCustom() => SizedBox(height: 19);
 }
