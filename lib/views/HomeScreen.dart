@@ -1,3 +1,4 @@
+import 'package:agenda_de_livros/controllers/HomeController.dart';
 import 'package:agenda_de_livros/widgets/DrawerCustom.dart';
 import '../models/dados_ficticios.dart';
 import 'package:flutter/material.dart';
@@ -11,32 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final filter = {"grupo": "Grupo", "pessoas": "Pessoas"};
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Tela Principal",
-          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 24.3),
-        ),
-        centerTitle: true,
-      ),
-      drawer: DrawerCustom(nameUser: "Teste"),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [buildRowFilter(), buildListGroupPeople(context)],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget buildRowFilter() {
     return Row(
       children: [
@@ -55,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildListGroupPeople(BuildContext context) {
+  Widget buildListGroupPeople(BuildContext context, VoidCallback _onPressed) {
     return Column(
       children: List.generate(DadosFicticios.listaGroupPeople.length, (index) {
         var map = DadosFicticios.listaGroupPeople[index];
@@ -124,12 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ShadButton.ghost(
-                                onPressed: () {
-                                  onClickButtonEdit(
-                                    context,
-                                    "${map["nome do grupo"]}",
-                                  );
-                                },
+                                onPressed: _onPressed,
                                 leading: Icon(Icons.edit),
                                 size: ShadButtonSize.regular,
                                 child: Text("Editar"),
@@ -170,5 +140,34 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildSizedBoxWidthCustom() => SizedBox(width: 10);
+
   void onClickButtonEdit(BuildContext context, String nameGroup) {}
+
+  final filter = {"grupo": "Grupo", "pessoas": "Pessoas"};
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Tela Principal",
+          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 24.3),
+        ),
+        centerTitle: true,
+      ),
+      drawer: DrawerCustom(nameUser: "Teste"),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildRowFilter(),
+              buildListGroupPeople(context, HomeController().onClickButtonEdit),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

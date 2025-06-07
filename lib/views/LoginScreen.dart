@@ -1,4 +1,4 @@
-import 'package:agenda_de_livros/funcs/Funcs.dart';
+import 'package:agenda_de_livros/controllers/Funcs.dart';
 import 'package:agenda_de_livros/widgets/TextFormText.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -11,14 +11,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final Map<String, TextEditingController> controllers = {
+  final controllers = {
     "controllerUser": TextEditingController(),
     "controllerPassword": TextEditingController(),
   };
-  final Map<String, GlobalKey<FormState>> formkeys = {
+
+  final formkeys = {
     "user": GlobalKey<FormState>(),
     "password": GlobalKey<FormState>(),
   };
+
   final details = [
     (
       title: "Para que server esse sistema???",
@@ -31,7 +33,79 @@ class _LoginScreenState extends State<LoginScreen> {
           "Quem esta desenvolvendo essa aplicação é o Felipe Santos, que é um estudante que gosta da area !",
     ),
   ];
+
+  Widget buildRowCheckBox() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: ListTile(
+            leading: Checkbox(
+              value: _valueCreateAccount,
+              onChanged: (value) {
+                setState(() {
+                  _valueCreateAccount = true;
+                  _valueAccessAccount = false;
+                });
+              },
+            ),
+
+            title: Text("Criar Conta"),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: ListTile(
+            leading: Checkbox(
+              value: _valueAccessAccount,
+              onChanged: (bool? value) {
+                setState(() {
+                  _valueAccessAccount = true;
+                  _valueCreateAccount = false;
+                });
+              },
+            ),
+            title: Text("Acessar Conta"),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildButton(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 55,
+      child: ElevatedButton(
+        onPressed: () {
+          Funcs().callValidatorTextForm(formkeys, context, "/home");
+        },
+        child: Text("Entrar/Acessar"),
+      ),
+    );
+  }
+
+  Widget buildAccordion() {
+    return Column(
+      children: [
+        ShadAccordion<({String title, String content})>.multiple(
+          maintainState: true,
+          children: details.map(
+            (e) => ShadAccordionItem(
+              value: e,
+              title: Text(e.title),
+              child: Text(e.content),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildSizedBoxFixedCustom() => SizedBox(height: 19);
+
   bool _valueCreateAccount = false;
+
   bool _valueAccessAccount = false;
   @override
   Widget build(BuildContext context) {
@@ -77,39 +151,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   formkey: formkeys["password"]!,
                   isPassword: true,
                 ),
+
                 buildSizedBoxFixedCustom(),
+
                 buildRowCheckBox(),
+
                 buildSizedBoxFixedCustom(),
-                Column(
-                  children: [
-                    ShadAccordion<({String title, String content})>.multiple(
-                      maintainState: true,
-                      children: details.map(
-                        (e) => ShadAccordionItem(
-                          value: e,
-                          title: Text(e.title),
-                          child: Text(e.content),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+
+                buildAccordion(),
+
                 buildSizedBoxFixedCustom(),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 55,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Funcs().verification(
-                        formkeys,
-                        controllers["controllerUser"]!.text.trim(),
-                        controllers["controllerPassword"]!.text.trim(),
-                        context,
-                      );
-                    },
-                    child: Text("Entrar/Acessar"),
-                  ),
-                ),
+
+                buildButton(context),
               ],
             ),
           ),
@@ -117,44 +170,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  Widget buildRowCheckBox() {
-    return Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: ListTile(
-            leading: Checkbox(
-              value: _valueCreateAccount,
-              onChanged: (value) {
-                setState(() {
-                  _valueCreateAccount = true;
-                  _valueAccessAccount = false;
-                });
-              },
-            ),
-
-            title: Text("Criar Conta"),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: ListTile(
-            leading: Checkbox(
-              value: _valueAccessAccount,
-              onChanged: (bool? value) {
-                setState(() {
-                  _valueAccessAccount = true;
-                  _valueCreateAccount = false;
-                });
-              },
-            ),
-            title: Text("Acessar Conta"),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildSizedBoxFixedCustom() => SizedBox(height: 19);
 }
