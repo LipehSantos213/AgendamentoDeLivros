@@ -1,11 +1,12 @@
+import 'package:agenda_de_livros/views/AddExemplaryScreen.dart';
+import 'package:agenda_de_livros/views/AddReaderScreen.dart';
 import 'package:agenda_de_livros/views/HomeScreen.dart';
 import 'package:agenda_de_livros/views/LoginScreen.dart';
 import 'package:agenda_de_livros/views/RegisterNewBookScreen.dart';
 import 'package:agenda_de_livros/views/RegisterNewGroupScreen.dart';
 import 'package:agenda_de_livros/views/ViewLibraryScreen.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:agenda_de_livros/views/ViewReadersScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,29 +17,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadApp.custom(
-      themeMode: ThemeMode.light,
-      darkTheme: ShadThemeData(
-        textTheme: ShadTextTheme.fromGoogleFont(GoogleFonts.poppins),
-        brightness: Brightness.dark,
-        colorScheme: const ShadSlateColorScheme.dark(),
+    final routes = {
+      "/login": (context) => LoginScreen(),
+      "/home": (context) => HomeScreen(),
+      "/registernewbook": (context) => RegisterNewBookScreen(),
+      "/registernewgroup": (context) => RegisterNewGroupScreen(),
+      "/viewlibrary": (context) => ViewLibraryScreen(),
+      "/addreader": (context) => AddReaderScreen(),
+      "/viewreaders": (context) => ViewReadersScreen(),
+      "/addexemplary": (context) => AddExemplaryScreen(),
+    };
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 0, 0, 0),
+          error: const Color.fromARGB(255, 255, 33, 18),
+          primary: Colors.black,
+        ),
       ),
-      appBuilder: (context) {
-        return MaterialApp(
-          theme: Theme.of(context),
-          builder: (context, child) {
-            return ShadAppBuilder(child: child!);
-          },
-          initialRoute: "/login",
-          routes: {
-            "/login": (context) => LoginScreen(),
-            "/home": (context) => HomeScreen(),
-            "/registernewbook": (context) => RegisterNewBookScreen(),
-            "/registernewgroup": (context) => RegisterNewGroupScreen(),
-            "/viewlibrary": (context) => ViewLibraryScreen(),
-          },
-        );
-      },
+      debugShowCheckedModeBanner: false,
+      initialRoute: "/login",
+      routes: routes,
     );
   }
 }

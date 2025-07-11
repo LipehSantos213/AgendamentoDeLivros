@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 class DrawerCustom extends StatefulWidget {
   final String nameUser;
@@ -28,19 +27,17 @@ class _DrawerCustomState extends State<DrawerCustom> {
             ),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
-                'https://i.pinimg.com/736x/5d/6f/c3/5d6fc370cb0bf6ea74ac62b42e8e5e72.jpg',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-x04_yfs_vuuNaO9G-gwRUF8UBwSF8Nz1GQ&s',
               ),
             ),
             accountName: Text(
-              widget.nameUser.toString().trim().split(
-                " ",
-              )[0], // pega o primeiro nome do Usuario
+              "Carlinhos Acutis", // pega o primeiro nome do Usuario
               style: TextStyle(fontSize: 25),
             ),
             accountEmail: null,
           ),
           ListTile(
-            leading: Icon(LucideIcons.bookMarked400, size: 24),
+            leading: Icon(Icons.bookmark, size: 24),
             title: Text(
               "Adicionar Um Novo Livro",
               style: TextStyle(fontSize: 14.4),
@@ -48,6 +45,11 @@ class _DrawerCustomState extends State<DrawerCustom> {
             onTap: () {
               Navigator.pushNamed(context, "/registernewbook");
             },
+          ),
+          ListTile(
+            leading: Icon(Icons.person, size: 24),
+            title: Text("Adicionar Leitor", style: TextStyle(fontSize: 15.4)),
+            onTap: () => Navigator.pushNamed(context, "/addreader"),
           ),
           ListTile(
             leading: Icon(Icons.group_sharp, size: 24),

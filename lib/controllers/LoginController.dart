@@ -1,3 +1,6 @@
+// ignore: file_names
+import '../models/LoginModel.dart';
+
 class LoginController {
   String? validationUserName(String username) {
     if (username.length > 40) {
@@ -19,4 +22,34 @@ class LoginController {
     }
     return null;
   }
+
+  String? validationEmail(String email) {
+    if (email.trim().contains(" ")) {
+      return "foi encontrado um espaço !";
+    }
+    if (!(email.contains("@gmail.com") ||
+        email.contains("@aluno.ce.gov.br") ||
+        email.contains("@hotmail.com"))) {
+      return "email invalido";
+    }
+    String nomeUsuario = email.substring(0, email.indexOf("@"));
+    if (nomeUsuario.length < 8) {
+      return "O nome do email: $nomeUsuario, dever ter mais de 8 carasteres";
+    }
+    if (RegExp(r'[A-Z]').hasMatch(nomeUsuario)) {
+      return "foi achado uma letra maiuscula, corrija";
+    }
+    if (RegExp(
+      r'[áàâãäéèêëíìîïóòôõöúùûüçÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ]',
+    ).hasMatch(email)) {
+      return "não pode ter acento";
+    }
+    return null;
+  }
+
+  Future<void> addUser(String email, String user, String password) async {
+    final conta = LoginModel(email: email, user: user, password: password);
+  }
+
+  Future<void> removeUser(int id) async {}
 }

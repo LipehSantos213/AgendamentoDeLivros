@@ -1,7 +1,7 @@
 import 'package:agenda_de_livros/controllers/Funcs.dart';
 import 'package:agenda_de_livros/widgets/TextFormText.dart';
 import 'package:flutter/material.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+// import 'package:shadcn_ui/shadcn_ui.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,18 +21,18 @@ class _LoginScreenState extends State<LoginScreen> {
     "password": GlobalKey<FormState>(),
   };
 
-  final details = [
-    (
-      title: "Para que server esse sistema???",
-      content:
-          "A principal função dele é, armazenar, salvar, editar e listar livros, com um Banco de Dados Local",
-    ),
-    (
-      title: "Area do Programador",
-      content:
-          "Quem esta desenvolvendo essa aplicação é o Felipe Santos, que é um estudante que gosta da area !",
-    ),
-  ];
+  // final details = [
+  //   (
+  //     title: "Para que server esse sistema???",
+  //     content:
+  //         "A principal função dele é, armazenar, salvar, editar e listar livros, com um Banco de Dados Local",
+  //   ),
+  //   (
+  //     title: "Area do Programador",
+  //     content:
+  //         "Quem esta desenvolvendo essa aplicação é o Felipe Santos, que é um estudante que gosta da area !",
+  //   ),
+  // ];
 
   Widget buildRowCheckBox() {
     return Row(
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget buildButton(BuildContext context) {
+  Widget buildButton() {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 55,
@@ -80,38 +80,41 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () {
           Funcs().callValidatorTextForm(formkeys, context, "/home");
         },
-        child: Text("Entrar/Acessar"),
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.black87),
+        child: Text(
+          "Entrar/Acessar",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontSize: 17,
+          ),
+        ),
       ),
     );
   }
 
-  Widget buildAccordion() {
+  Widget buildSizedBoxFixedCustom() => SizedBox(height: 19);
+
+  Widget buildTitleMyApp() {
     return Column(
       children: [
-        ShadAccordion<({String title, String content})>.multiple(
-          maintainState: true,
-          children: details.map(
-            (e) => ShadAccordionItem(
-              value: e,
-              title: Text(e.title),
-              child: Text(e.content),
-            ),
-          ),
+        Image.asset("assets/images/book.png", width: 200, height: 185),
+        Text(
+          "Ola, Tudo Bem ?",
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800),
         ),
       ],
     );
   }
-
-  Widget buildSizedBoxFixedCustom() => SizedBox(height: 19);
 
   bool _valueCreateAccount = false;
 
   bool _valueAccessAccount = false;
   @override
   Widget build(BuildContext context) {
-    // double tamanhoStatusBar = MediaQuery.of(context).padding.top;
-    // double tamanhoAppBar = kToolbarHeight;
+    // TELA FINALIZADA !!!
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -119,22 +122,10 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Column(
-                  children: [
-                    Image.asset(
-                      "assets/images/book.png",
-                      width: 200,
-                      height: 185,
-                    ),
-                    Text(
-                      "Ola, Tudo Bem ?",
-                      style: ShadTheme.of(
-                        context,
-                      ).textTheme.h1.copyWith(fontSize: 40),
-                    ),
-                  ],
-                ),
+                buildTitleMyApp(),
+
                 buildSizedBoxFixedCustom(),
+
                 TextFormText(
                   controller: controllers['controllerUser']!,
                   label: "Usuario",
@@ -142,7 +133,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   prefixIcon: Icons.person,
                   formkey: formkeys['user']!,
                 ),
+
                 buildSizedBoxFixedCustom(),
+
                 TextFormText(
                   controller: controllers['controllerPassword']!,
                   label: "Senha",
@@ -152,17 +145,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true,
                 ),
 
+                if (_valueCreateAccount) ...[
+                  buildSizedBoxFixedCustom(),
+                  TextFormText(
+                    controller: controllers["controllerConfirmPassword"],
+                    label: "Confirma Senha",
+                    hint: "confirma senha",
+                    prefixIcon: Icons.password,
+                    formkey: formkeys["formkeyConfirmPassword"],
+                    isPassword: true,
+                  ),
+                ],
+
                 buildSizedBoxFixedCustom(),
 
                 buildRowCheckBox(),
 
                 buildSizedBoxFixedCustom(),
 
-                buildAccordion(),
-
                 buildSizedBoxFixedCustom(),
 
-                buildButton(context),
+                buildButton(),
               ],
             ),
           ),

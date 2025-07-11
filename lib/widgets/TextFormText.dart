@@ -3,6 +3,7 @@
 import 'package:agenda_de_livros/controllers/LoginController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TextFormText extends StatefulWidget {
   final GlobalKey? formkey;
@@ -12,6 +13,7 @@ class TextFormText extends StatefulWidget {
   final String hint;
   final String label;
   final bool number;
+  // final bool isDate;
 
   const TextFormText({
     required this.controller,
@@ -21,6 +23,7 @@ class TextFormText extends StatefulWidget {
     required this.formkey,
     this.number = false,
     this.isPassword = false,
+    // this.isDate = false,
     super.key,
   });
 
@@ -36,6 +39,21 @@ class _TextFormTextState extends State<TextFormText> {
     super.initState();
     _isObscure = widget.isPassword;
   }
+
+  // Future<void> selecionarData(BuildContext context) async {
+  //   final DateTime? dataEscolhida = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime(2000, 1, 1),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime.now(),
+  //     helpText: "Selecione uma data",
+  //     locale: const Locale("pt", "BR"),
+  //   );
+  //   if (dataEscolhida != null) {
+  //     String dataFormatada = DateFormat("dd/MM/yyyy").format(dataEscolhida);
+  //     widget.controller?.text = dataFormatada;
+  //   }
+  // }
 
   InputDecoration _decorationInput() {
     return InputDecoration(
@@ -82,7 +100,7 @@ class _TextFormTextState extends State<TextFormText> {
       child: TextFormField(
         controller: widget.controller,
         obscureText: widget.isPassword ? _isObscure : false,
-        keyboardType: widget.number ? TextInputType.number : null,
+        keyboardType: widget.number ? TextInputType.number : TextInputType.text,
         cursorColor: Colors.black,
         inputFormatters:
             widget.number
@@ -90,16 +108,19 @@ class _TextFormTextState extends State<TextFormText> {
                 : null, // Bloqueia letras e caracteres especiais
 
         decoration: _decorationInput(),
-
         validator: (value) {
+          final _controlLogin = LoginController();
           if (value == null || value.isEmpty) {
             return "esse espaço não pode ficar vazio";
           }
           if (widget.label == "Usuario") {
-            LoginController().validationUserName(value.trim());
+            return _controlLogin.validationUserName(value.trim());
           }
           if (widget.label == "Senha") {
-            LoginController().validationPassword(value.trim());
+            return _controlLogin.validationPassword(value.trim());
+          }
+          if (widget.label == "Email") {
+            return _controlLogin.validationEmail(value.trim());
           }
 
           return null;

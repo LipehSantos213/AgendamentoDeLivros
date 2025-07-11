@@ -131,3 +131,102 @@ class DadosFicticios {
     },
   ];
 }
+
+
+// Card(
+//           child: Padding(
+//             padding: const EdgeInsets.all(12.0),
+//             child: SizedBox(
+//               height: 100,
+//               width: MediaQuery.of(context).size.width,
+//               child: Row(
+//                 crossAxisAlignment: CrossAxisAlignment.stretch,
+//                 children: [
+//                   // Imagem
+//                   avatarGroup(),
+//                   buildSizedBoxWidthCustom(),
+//                   Expanded(
+//                     flex: 6,
+//                     child: Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         // coluna com os elementos: Nome do Grupo; Descrição; Quantidade de Pessoas
+//                         Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           children: [
+//                             Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   "${map['nome do grupo']}",
+//                                   style: TextStyle(
+//                                     fontSize: 17,
+//                                     fontWeight: FontWeight.w600,
+//                                   ),
+//                                 ),
+//                                 Text(
+//                                   "${map['descrição']}",
+//                                   style: TextStyle(
+//                                     fontSize: 14,
+//                                     fontWeight: FontWeight.w400,
+//                                     color: Colors.grey,
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                             Row(
+//                               children: [
+//                                 Icon(Icons.person, size: 25),
+//                                 Text(
+//                                   "${map['quantidade de pessoas']}",
+//                                   style: TextStyle(fontSize: 14.4),
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//                         // coluna com os elemento: Botão Editar; Livros Sendo Lidos e Pedentes
+//                         Column(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           children: [
+//                             TextButton(
+//                               onPressed: () => onPressed(),
+//                               child: Row(
+//                                 children: [
+//                                   Icon(Icons.edit, size: 20),
+
+//                                   Text(
+//                                     "Editar",
+//                                     style: TextStyle(fontSize: 25),
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                             Row(
+//                               children: [
+//                                 Icon(Icons.book, color: Colors.lightGreen),
+//                                 Text("${map["livros sendo lidos"]}"),
+//                                 buildSizedBoxWidthCustom(),
+//                                 Icon(
+//                                   Icons.book,
+//                                   color: const Color.fromARGB(
+//                                     255,
+//                                     228,
+//                                     118,
+//                                     104,
+//                                   ),
+//                                 ),
+//                                 Text("${map['livros pedentes']}"),
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         );

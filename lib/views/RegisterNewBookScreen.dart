@@ -1,6 +1,7 @@
-// import 'package:flutter/cupertino.dart';
-
+// ignore: file_names
+import 'package:agenda_de_livros/controllers/BookController.dart';
 import 'package:agenda_de_livros/controllers/Funcs.dart';
+import 'package:agenda_de_livros/widgets/ButtonCustom.dart';
 import 'package:agenda_de_livros/widgets/TextFormText.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,8 @@ class RegisterNewBookScreen extends StatefulWidget {
 }
 
 class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
-  final Map<String, TextEditingController> controllers = {
+  final BookController _bookController = BookController.privateConstrutor();
+  final controllers = {
     "coverBook": TextEditingController(),
     "keywordBook": TextEditingController(),
     "nameBook": TextEditingController(),
@@ -24,7 +26,7 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     "controllerExemplar1": TextEditingController(),
   };
 
-  final Map<String, GlobalKey<FormState>> formkeys = {
+  final formkeys = {
     "coverBook": GlobalKey<FormState>(),
     "keywordBook": GlobalKey<FormState>(),
     "nameBook": GlobalKey<FormState>(),
@@ -44,56 +46,18 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     "hq": "Historia Em Quadrinho",
   };
 
-  void addControllerAndFormkey() {
-    controllers.addAll({
-      "controllerExemplar$countExemplar": TextEditingController(),
-    });
-    formkeys.addAll({"formkeyExemplar$countExemplar": GlobalKey<FormState>()});
-  }
-
-  void removeControllerAndFormkey() {
-    String lastElemetController = controllers.keys.toList().elementAt(
-      controllers.keys.toList().length - 1,
+  AppBar myAppBar() {
+    return AppBar(
+      title: Text("Adicionar Um Novo Livro"),
+      centerTitle: true,
+      leading: buildIconButton(Icons.arrow_back_rounded, () {
+        Navigator.pop(context);
+      }),
     );
-    String lastElementFormkeys = formkeys.keys.toList().elementAt(
-      formkeys.keys.toList().length - 1,
-    );
-    if (lastElemetController != "controllerExemplar1" &&
-        lastElementFormkeys != "formkeyExemplar1") {
-      controllers.remove(lastElemetController);
-      formkeys.remove(lastElementFormkeys);
-    }
-  }
-
-  void printControllersAndFormkeys() {
-    for (String element in controllers.keys) {
-      print("Controllers: $element");
-    }
-    for (String element in formkeys.keys) {
-      print("Formkey: $element");
-    }
   }
 
   Widget buildIconButton(IconData icone, VoidCallback onPressed) {
     return IconButton(onPressed: onPressed, icon: Icon(icone));
-  }
-
-  Widget buildButton(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: ElevatedButton(
-        onPressed: () {
-          Funcs().callValidatorTextForm(formkeys, context, "/home");
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 175, 238, 177),
-        ),
-        child: Text(
-          "Salvar",
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
   }
 
   Widget buildRowCustomWithElement(Widget firstElement, Widget secundElemet) {
@@ -111,73 +75,29 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     );
   }
 
-  Widget buildTextForTextForExemplarBook() {
-    return ListTile(
-      title: Row(
-        children: [
-          Text("Exemplares: "),
-          Expanded(child: Container()),
-          buildIconButton(Icons.remove, () {
-            setState(() {
-              countExemplar = countExemplar - 1;
-              if (countExemplar <= 0) {
-                countExemplar = 1;
-              }
-              removeControllerAndFormkey();
-            });
-          }),
-          buildIconButton(Icons.add, () {
-            setState(() {
-              countExemplar = countExemplar + 1;
-              addControllerAndFormkey();
-            });
-          }),
-        ],
-      ),
-      subtitle: Column(
-        children: [
-          Column(
-            children: List.generate(countExemplar, (index) {
-              return Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: TextFormText(
-                  controller: controllers["conntrollerExemplar${index + 1}"],
-                  label: "Exemplar${index + 1}",
-                  hint: "exemplar${index + 1}",
-                  prefixIcon: Icons.navigate_next,
-                  formkey: formkeys["formkeyExemplar${index + 1}"],
-                ),
-              );
-            }),
+  Widget buildButtonAddExemplar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () => Navigator.pushNamed(context, "/addexemplary"),
+          child: Row(
+            children: [
+              Icon(Icons.keyboard_double_arrow_right_rounded),
+              Text("Adicionar Exemplares"),
+            ],
           ),
-          if (countExemplar < 2) ...[
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 221, 217, 217),
-              ),
-              child: Text("Gerar Codigo Automatico"),
-            ),
-          ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   int countExemplar = 1;
   @override
   Widget build(BuildContext context) {
+    // TELA FINALIZADA !!!
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Adicionar Um Novo Livro"),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_rounded),
-        ),
-      ),
+      appBar: myAppBar(),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
@@ -254,10 +174,24 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
                   number: true,
                 ),
               ),
+              TextFormText(
+                controller: controllers["localização"],
+                label: "Localização",
+                hint: "estante A",
+                prefixIcon: Icons.location_on_rounded,
+                formkey: formkeys["localização"],
+              ),
+
               // Area para colocar o codigo de livros Exemplares
-              buildTextForTextForExemplarBook(),
+              buildButtonAddExemplar(),
+              SizedBox(height: 20),
               // Botão de "Salvar"
-              buildButton(context),
+              ButtonCustom(
+                onPressed: () {
+                  Funcs().callValidatorTextForm(formkeys, context, "/home");
+                },
+                text: "Salvar",
+              ),
             ],
           ),
         ),

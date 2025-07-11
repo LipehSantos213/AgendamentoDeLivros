@@ -1,8 +1,9 @@
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterNewBookController {
-  void generateAutomaticCode(Map<String, TextEditingController> controllers) {}
+class BookController {
+  BookController.privateConstrutor();
+  static final instance = BookController.privateConstrutor();
   String? validatorQuantifyBook(String value) {
     int? quantify = int.tryParse(value);
     double? doubleQuantify = double.tryParse(value);
