@@ -1,7 +1,42 @@
 // ignore: file_names
+import 'package:flutter/material.dart' show TextEditingController;
+import 'package:flutter/widgets.dart';
+
 import '../models/LoginModel.dart';
+import '../database/DbHelper.dart';
 
 class LoginController {
+  void addControllerAndFormkeyInConfirmSenha(
+    Map<String, TextEditingController> controllers,
+    Map<String, GlobalKey<FormState>> formkeys,
+    bool criarConta,
+  ) {
+    print("-----LoginController-----");
+
+    if (criarConta) {
+      print("Usuario esta criando uma conta !!!");
+      if (controllers.keys.last != "controllerConfirmPassword" &&
+          formkeys.keys.last != "confirmPassword") {
+        controllers.addAll({
+          "controllerConfirmPassword": TextEditingController(),
+        });
+        formkeys.addAll({"confirmPassword": GlobalKey<FormState>()});
+        print("Adicionado !!!");
+      }
+    } else {
+      print("Usuario esta acessando uma conta !!!");
+      String ultimoForm = formkeys.keys.last;
+      String ultimoController = controllers.keys.last;
+      if (ultimoController == "controllerConfirmPassword" &&
+          ultimoForm == "confirmPassword") {
+        controllers.remove(ultimoController);
+        formkeys.remove(ultimoForm);
+        print("Removidos !!!");
+      }
+    }
+  }
+
+  final db = DbHelper.privateConstrutor();
   String? validationUserName(String username) {
     if (username.length > 40) {
       return "nome de usuario muito grande";
@@ -47,8 +82,10 @@ class LoginController {
     return null;
   }
 
-  Future<void> addUser(String email, String user, String password) async {
-    final conta = LoginModel(email: email, user: user, password: password);
+  String? validationConfirmPasword(String confirmsenha, String senha) {}
+
+  Future<int> addUser(LoginModel login) async {
+    return await db.insertUser(login);
   }
 
   Future<void> removeUser(int id) async {}

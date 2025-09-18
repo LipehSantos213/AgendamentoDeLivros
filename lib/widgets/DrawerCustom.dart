@@ -43,23 +43,13 @@ class _DrawerCustomState extends State<DrawerCustom> {
               style: TextStyle(fontSize: 14.4),
             ),
             onTap: () {
-              Navigator.pushNamed(context, "/registernewbook");
+              Navigator.pushNamed(context, "/addbook");
             },
           ),
           ListTile(
             leading: Icon(Icons.person, size: 24),
             title: Text("Adicionar Leitor", style: TextStyle(fontSize: 15.4)),
             onTap: () => Navigator.pushNamed(context, "/addreader"),
-          ),
-          ListTile(
-            leading: Icon(Icons.group_sharp, size: 24),
-            title: Text(
-              "Adicionar Um Novo Grupo",
-              style: TextStyle(fontSize: 14.4),
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, "/registernewgroup");
-            },
           ),
           ListTile(
             leading: Icon(Icons.library_books_outlined, size: 24),

@@ -1,11 +1,11 @@
-import 'package:agenda_de_livros/views/AddExemplaryScreen.dart';
-import 'package:agenda_de_livros/views/AddReaderScreen.dart';
-import 'package:agenda_de_livros/views/HomeScreen.dart';
-import 'package:agenda_de_livros/views/LoginScreen.dart';
-import 'package:agenda_de_livros/views/RegisterNewBookScreen.dart';
-import 'package:agenda_de_livros/views/RegisterNewGroupScreen.dart';
-import 'package:agenda_de_livros/views/ViewLibraryScreen.dart';
-import 'package:agenda_de_livros/views/ViewReadersScreen.dart';
+import 'package:agenda_de_livros/views/TelaCadastrarLeitor.dart';
+import 'package:agenda_de_livros/views/TelaCatalogarLivro.dart';
+import 'package:agenda_de_livros/views/TelaConsultarLeitor.dart';
+import 'package:agenda_de_livros/views/TelaConsultarLivro.dart';
+import 'package:agenda_de_livros/views/TelaDeMenuPrincipal.dart';
+import 'package:agenda_de_livros/views/TelaDeLogin.dart';
+import 'package:agenda_de_livros/views/TelaCadastrarLivro.dart';
+import 'package:agenda_de_livros/views/TelaVerBiblioteca.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,14 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final routes = {
-      "/login": (context) => LoginScreen(),
-      "/home": (context) => HomeScreen(),
-      "/registernewbook": (context) => RegisterNewBookScreen(),
-      "/registernewgroup": (context) => RegisterNewGroupScreen(),
-      "/viewlibrary": (context) => ViewLibraryScreen(),
-      "/addreader": (context) => AddReaderScreen(),
-      "/viewreaders": (context) => ViewReadersScreen(),
-      "/addexemplary": (context) => AddExemplaryScreen(),
+      "/login": (context) => TelaDeLogin(),
+      "/home": (context) => TelaDeMenuPrincipal(),
+      "/addbook": (context) => TelaCadastrarLivro(),
+      "/viewlibrary": (context) => TelaVerBiblioteca(),
+      "/addreader": (context) => TelaCadastrarLeitor(),
+      "/catalogarlivro": (context) => TelaCatalogarLivro(),
+      "/consultarlivro": (context) => TelaConsultarLivro(),
+      "/consultarleitor": (context) => TelaConsultarLeitor(),
     };
     return MaterialApp(
       theme: ThemeData(

@@ -36,3 +36,10 @@ class GroupModel {
     );
   }
 }
+
+class UserBaseModel {
+  final String name;
+  final String email;
+
+  UserBaseModel({required this.name, required this.email});
+}

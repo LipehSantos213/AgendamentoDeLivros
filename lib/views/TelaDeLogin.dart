@@ -1,38 +1,28 @@
 import 'package:agenda_de_livros/controllers/Funcs.dart';
+import 'package:agenda_de_livros/controllers/LoginController.dart';
 import 'package:agenda_de_livros/widgets/TextFormText.dart';
 import 'package:flutter/material.dart';
 // import 'package:shadcn_ui/shadcn_ui.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class TelaDeLogin extends StatefulWidget {
+  const TelaDeLogin({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<TelaDeLogin> createState() => _TelaDeLoginState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _TelaDeLoginState extends State<TelaDeLogin> {
   final controllers = {
     "controllerUser": TextEditingController(),
+    "controllerEmail": TextEditingController(),
     "controllerPassword": TextEditingController(),
   };
 
   final formkeys = {
     "user": GlobalKey<FormState>(),
+    "email": GlobalKey<FormState>(),
     "password": GlobalKey<FormState>(),
   };
-
-  // final details = [
-  //   (
-  //     title: "Para que server esse sistema???",
-  //     content:
-  //         "A principal função dele é, armazenar, salvar, editar e listar livros, com um Banco de Dados Local",
-  //   ),
-  //   (
-  //     title: "Area do Programador",
-  //     content:
-  //         "Quem esta desenvolvendo essa aplicação é o Felipe Santos, que é um estudante que gosta da area !",
-  //   ),
-  // ];
 
   Widget buildRowCheckBox() {
     return Row(
@@ -46,6 +36,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   _valueCreateAccount = true;
                   _valueAccessAccount = false;
+                  controller.addControllerAndFormkeyInConfirmSenha(
+                    controllers,
+                    formkeys,
+                    _valueCreateAccount, // criando uma conta !!!
+                  );
                 });
               },
             ),
@@ -62,6 +57,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   _valueAccessAccount = true;
                   _valueCreateAccount = false;
+                  controller.addControllerAndFormkeyInConfirmSenha(
+                    controllers,
+                    formkeys,
+                    _valueCreateAccount,
+                  );
                 });
               },
             ),
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         style: ElevatedButton.styleFrom(backgroundColor: Colors.black87),
         child: Text(
-          "Entrar/Acessar",
+          "Criar/Acessar",
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: Colors.white,
@@ -109,7 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _valueCreateAccount = false;
 
-  bool _valueAccessAccount = false;
+  bool _valueAccessAccount = true;
+
+  final controller = LoginController();
   @override
   Widget build(BuildContext context) {
     // TELA FINALIZADA !!!
@@ -125,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 buildTitleMyApp(),
 
                 buildSizedBoxFixedCustom(),
-
+                // Campo: Usuario
                 TextFormText(
                   controller: controllers['controllerUser']!,
                   label: "Usuario",
@@ -135,7 +137,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 buildSizedBoxFixedCustom(),
-
+                // Campo: Email
+                TextFormText(
+                  controller: controllers["controllerEmail"],
+                  label: "Email",
+                  hint: "Email",
+                  prefixIcon: Icons.email,
+                  formkey: formkeys["email"],
+                ),
+                buildSizedBoxFixedCustom(),
+                // Campo: Senha
                 TextFormText(
                   controller: controllers['controllerPassword']!,
                   label: "Senha",
@@ -145,23 +156,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   isPassword: true,
                 ),
 
-                if (_valueCreateAccount) ...[
+                // Campo: Confirma Senha
+                if (!_valueAccessAccount) ...[
                   buildSizedBoxFixedCustom(),
                   TextFormText(
                     controller: controllers["controllerConfirmPassword"],
                     label: "Confirma Senha",
                     hint: "confirma senha",
                     prefixIcon: Icons.password,
-                    formkey: formkeys["formkeyConfirmPassword"],
-                    isPassword: true,
+                    formkey: formkeys["confirmPassword"],
+                    // isPassword: true,
                   ),
                 ],
 
                 buildSizedBoxFixedCustom(),
 
                 buildRowCheckBox(),
-
-                buildSizedBoxFixedCustom(),
 
                 buildSizedBoxFixedCustom(),
 

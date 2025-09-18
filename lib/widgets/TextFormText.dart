@@ -40,21 +40,6 @@ class _TextFormTextState extends State<TextFormText> {
     _isObscure = widget.isPassword;
   }
 
-  // Future<void> selecionarData(BuildContext context) async {
-  //   final DateTime? dataEscolhida = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime(2000, 1, 1),
-  //     firstDate: DateTime(1900),
-  //     lastDate: DateTime.now(),
-  //     helpText: "Selecione uma data",
-  //     locale: const Locale("pt", "BR"),
-  //   );
-  //   if (dataEscolhida != null) {
-  //     String dataFormatada = DateFormat("dd/MM/yyyy").format(dataEscolhida);
-  //     widget.controller?.text = dataFormatada;
-  //   }
-  // }
-
   InputDecoration _decorationInput() {
     return InputDecoration(
       labelText: widget.label,
@@ -108,22 +93,22 @@ class _TextFormTextState extends State<TextFormText> {
                 : null, // Bloqueia letras e caracteres especiais
 
         decoration: _decorationInput(),
+        // ignore: body_might_complete_normally_nullable
         validator: (value) {
-          final _controlLogin = LoginController();
-          if (value == null || value.isEmpty) {
+          final controlLogin = LoginController();
+          if (value!.isEmpty) {
             return "esse espaço não pode ficar vazio";
           }
           if (widget.label == "Usuario") {
-            return _controlLogin.validationUserName(value.trim());
+            return controlLogin.validationUserName(value.trim());
           }
           if (widget.label == "Senha") {
-            return _controlLogin.validationPassword(value.trim());
+            return controlLogin.validationPassword(value.trim());
           }
           if (widget.label == "Email") {
-            return _controlLogin.validationEmail(value.trim());
+            return controlLogin.validationEmail(value.trim());
           }
-
-          return null;
+          if (widget.label == "Confirma Senha") {}
         },
       ),
     );

@@ -1,16 +1,13 @@
-import 'package:agenda_de_livros/models/ExemplarModel.dart';
-
 class BookModel {
-  int? id;
-  String titulo;
-  String autor;
-  String imagemCapa;
-  String palavraChave;
-  String genero;
-  int quantidade;
-  String editora;
-  int anoPublicacao;
-  List<ExemplarModel>? exemplares;
+  final int? id;
+  final String titulo;
+  final String autor;
+  final String imagemCapa;
+  final String palavraChave;
+  final String genero;
+  final int quantidade;
+  final String editora;
+  final int anoPublicacao;
   BookModel({
     this.id,
     required this.titulo,
@@ -21,19 +18,18 @@ class BookModel {
     required this.quantidade,
     required this.editora,
     required this.anoPublicacao,
-    this.exemplares,
   });
   Map<String, dynamic> toMap() {
     return {
       "id": id,
       "titulo": titulo,
+      "autor": autor,
       "capa": imagemCapa,
       "palavra chave": palavraChave,
       "gênero": genero,
       "quantidade": quantidade,
       "editora": editora,
       "ano publicação": anoPublicacao,
-      "exemplares": exemplares,
     };
   }
 
@@ -48,7 +44,6 @@ class BookModel {
       quantidade: map["quantidade"],
       editora: map["editora"],
       anoPublicacao: map["ano publicação"],
-      exemplares: map["exemplares"],
     );
   }
 }

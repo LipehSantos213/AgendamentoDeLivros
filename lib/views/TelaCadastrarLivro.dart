@@ -1,19 +1,20 @@
 // ignore: file_names
 import 'package:agenda_de_livros/controllers/BookController.dart';
 import 'package:agenda_de_livros/controllers/Funcs.dart';
-import 'package:agenda_de_livros/widgets/ButtonCustom.dart';
+import 'package:agenda_de_livros/widgets/BuildButtonNavCustom.dart';
+import 'package:agenda_de_livros/widgets/AppBarCustom.dart';
 import 'package:agenda_de_livros/widgets/TextFormText.dart';
 import 'package:flutter/material.dart';
 
-class RegisterNewBookScreen extends StatefulWidget {
-  const RegisterNewBookScreen({super.key});
+class TelaCadastrarLivro extends StatefulWidget {
+  const TelaCadastrarLivro({super.key});
 
   @override
-  State<RegisterNewBookScreen> createState() => _RegisterNewBookScreenState();
+  State<TelaCadastrarLivro> createState() => _TelaCadastrarLivroState();
 }
 
-class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
-  final BookController _bookController = BookController.privateConstrutor();
+class _TelaCadastrarLivroState extends State<TelaCadastrarLivro> {
+  // final BookController _bookController = BookController.privateConstrutor();
   final controllers = {
     "coverBook": TextEditingController(),
     "keywordBook": TextEditingController(),
@@ -27,15 +28,12 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
   };
 
   final formkeys = {
-    "coverBook": GlobalKey<FormState>(),
-    "keywordBook": GlobalKey<FormState>(),
     "nameBook": GlobalKey<FormState>(),
     "nameAuthor": GlobalKey<FormState>(),
     "genreBook": GlobalKey<FormState>(),
     "quantifyBook": GlobalKey<FormState>(),
     "publisher": GlobalKey<FormState>(),
     "publicationYear": GlobalKey<FormState>(),
-    "formkeyExemplar1": GlobalKey<FormState>(),
   };
 
   final genre = {
@@ -46,18 +44,17 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     "hq": "Historia Em Quadrinho",
   };
 
-  AppBar myAppBar() {
-    return AppBar(
-      title: Text("Adicionar Um Novo Livro"),
-      centerTitle: true,
-      leading: buildIconButton(Icons.arrow_back_rounded, () {
-        Navigator.pop(context);
-      }),
-    );
-  }
-
   Widget buildIconButton(IconData icone, VoidCallback onPressed) {
-    return IconButton(onPressed: onPressed, icon: Icon(icone));
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(icone),
+      style: IconButton.styleFrom(
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+          side: BorderSide(width: 2.5, color: Colors.white),
+        ),
+      ),
+    );
   }
 
   Widget buildRowCustomWithElement(Widget firstElement, Widget secundElemet) {
@@ -75,52 +72,18 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
     );
   }
 
-  Widget buildButtonAddExemplar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, "/addexemplary"),
-          child: Row(
-            children: [
-              Icon(Icons.keyboard_double_arrow_right_rounded),
-              Text("Adicionar Exemplares"),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  int countExemplar = 1;
   @override
   Widget build(BuildContext context) {
     // TELA FINALIZADA !!!
     return Scaffold(
-      appBar: myAppBar(),
+      appBar: AppBarCustom(title: "Cadastrar Livro"),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           padding: EdgeInsets.all(12),
           child: Column(
             children: [
-              // Campo: Capa, Palavra Chave
-              buildRowCustomWithElement(
-                TextFormText(
-                  controller: controllers["coverBook"],
-                  label: "Capa",
-                  hint: "url ou imagem",
-                  prefixIcon: Icons.collections,
-                  formkey: formkeys["coverBook"],
-                ),
-                TextFormText(
-                  controller: controllers["keywordBook"],
-                  label: "Palavra Chave",
-                  hint: "palavra para busca",
-                  prefixIcon: Icons.keyboard_arrow_right_rounded,
-                  formkey: formkeys["keywordBBook"],
-                ),
-              ),
+              SizedBox(height: 30),
               // Campo: titulo, Autor
               buildRowCustomWithElement(
                 TextFormText(
@@ -138,6 +101,7 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
                   formkey: formkeys["nameAuthor"],
                 ),
               ),
+
               // Campo: Gênero, Quantidade
               buildRowCustomWithElement(
                 TextFormText(
@@ -174,6 +138,7 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
                   number: true,
                 ),
               ),
+              // Campo: Localização
               TextFormText(
                 controller: controllers["localização"],
                 label: "Localização",
@@ -182,15 +147,13 @@ class _RegisterNewBookScreenState extends State<RegisterNewBookScreen> {
                 formkey: formkeys["localização"],
               ),
 
-              // Area para colocar o codigo de livros Exemplares
-              buildButtonAddExemplar(),
               SizedBox(height: 20),
               // Botão de "Salvar"
-              ButtonCustom(
-                onPressed: () {
+              BuildButtonNavCustom(
+                title: "Salvar",
+                onClick: () {
                   Funcs().callValidatorTextForm(formkeys, context, "/home");
                 },
-                text: "Salvar",
               ),
             ],
           ),
