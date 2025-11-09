@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:agenda_de_livros/models/LoginModel.dart';
+import 'package:agenda_de_livros/models/UserModel.dart';
 
 class DbHelper {
   // CLASSE PARA GERENCIAR TODAS AS OPERAÇOES DO BANCO SQLite
@@ -29,36 +29,102 @@ class DbHelper {
 
   // Criando as tabelas do BD
   Future onCreate(Database db, int version) async {
+    // Ativa o uso de chaves estrangeiras
+    await db.execute('PRAGMA foreign_keys = ON');
     String script = '''
     CREATE TABLE conta (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user TEXT NOT NULL,
+      usuario TEXT NOT NULL,
       email TEXT NOT NULL,
-      password TEXT NOT NULL
+      senha TEXT NOT NULL
+    );
+    CREATE TABLE livro (
+      idLivro INTEGER PRIMARY KEY AUTOINCREMENT
+      titulo TEXT NOT NULL,
+      autor TEXT NOT NULL,
+      palavraChave TEXT,
+      genero TEXT NOT NULL,
+      quantidade INTEGER NOT NULL,
+      editora TEXT NOT NULL,
+      anoPublicacao TEXT NOT NULL,
+      numeroPaginas INTEGER NOT NULL,
+      edicao TEXT NOT NULL, 
+      idioma TEXT NOT NULL,
+      descricao TEXT NOT NULL,
+      localizacao TEXT NOT NULL,
+      idConta INTEGER NOT NULL,
+      FOREIGN KEY (idConta) REFERENCES conta(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+    );
+    CREATE TABLE livroExemplar (
+      id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+      isbn TEXT NOT NULL,
+      numeroExemplar INTEGER NOT NULL,
+      status TEXT NOT NULL,
+      idLivro INTEGER NOT NULL,
+      FOREIGN KEY (idLivro) REFERENCES livro(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+    );
 
-    )
+    CREATE TABLE leitor (
+      id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      sobrenome TEXT NOT NULL,
+      telefone TEXT NOT NULL,
+      email TEXT NOT NULL,
+      rua TEXT NOT NULL,
+      bairro TEXT NOT NULL,
+      cep TEXT NOT NULL,
+      cidade TEXT NOT NULL,
+      dataNascimento TEXT NOT NULL,
+    );
+    CREATE TABLE emprestimo (
+      id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+      nomePessoa TEXT NOT NULL,
+      livroEmprestado TEXT NOT NULL,
+      dataEmprestimo TEXT NOT NULL,
+      dataDevolucaoPrevista TEXT NOT NULL,
+      dataDevolucaoEfetiva TEXT NOT NULL,
+      devolvido INTEGER NOT NULL,
+      obseracoes TEXT,
+      status TEXT NOT NULL,
+      idExemplar INTEGER NOT NULL,
+      idLeitor INTEGER NOT NULL,  
+      FOREIGN KEY (idExemplar) REFERENCES livroExemplar(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+      FOREIGN KEY (idLeitor) REFERENCES leitor(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+    );
+
+    
+    
+    
 ''';
     await db.execute(script);
   }
 
   // CRUD
-  Future<int> insertUser(LoginModel login) async {
+  Future<int> insertUser(UserModel login) async {
     Database db = await instance.database;
     return await db.insert("conta", login.toMap());
   }
 
-  Future<List<LoginModel>> getUsers() async {
+  Future<List<UserModel>> getUsers() async {
     Database db = await instance.database;
     List<Map<String, dynamic>> maps = await db.query(
       "conta",
     ); // pega todos os registros da tabela
     return List.generate(
       maps.length,
-      (index) => LoginModel.fromJson(maps[index]),
+      (index) => UserModel.fromJson(maps[index]),
     );
   }
 
-  Future<LoginModel?> getUserById(int id) async {
+  Future<UserModel?> getUserById(int id) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> maps = await db.query(
       "conta",
@@ -66,12 +132,12 @@ class DbHelper {
       whereArgs: [id],
     );
     if (maps.isNotEmpty) {
-      return LoginModel.fromJson(maps.first);
+      return UserModel.fromJson(maps.first);
     }
     return null;
   }
 
-  Future<int> updateUser(LoginModel login) async {
+  Future<int> updateUser(UserModel login) async {
     Database db = await instance.database;
     return await db.update(
       "conta",
