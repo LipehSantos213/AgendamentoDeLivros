@@ -1,8 +1,8 @@
 // ignore: file_names
-import 'package:flutter/material.dart' show TextEditingController;
+// import 'package:flutter/material.dart' show TextEditingController;
 import 'package:flutter/widgets.dart';
 
-import '../models/LoginModel.dart';
+import '../models/UserModel.dart';
 import '../database/DbHelper.dart';
 
 class LoginController {
@@ -84,9 +84,12 @@ class LoginController {
 
   String? validationConfirmPasword(String confirmsenha, String senha) {}
 
-  Future<int> addUser(LoginModel login) async {
+  Future<int> addUser(UserModel login) async {
     return await db.insertUser(login);
   }
 
   Future<void> removeUser(int id) async {}
+
+  Future buscarLivros() async{
+  }
 }
