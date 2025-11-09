@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-class BuildButtonNavCustom extends StatelessWidget {
+class BuildButtonNavCustom extends StatefulWidget {
   final String title;
   final VoidCallback onClick;
+
   const BuildButtonNavCustom({
     super.key,
     required this.title,
@@ -10,22 +11,65 @@ class BuildButtonNavCustom extends StatelessWidget {
   });
 
   @override
+  State<BuildButtonNavCustom> createState() => _BuildButtonNavCustomState();
+}
+
+class _BuildButtonNavCustomState extends State<BuildButtonNavCustom> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width - 100,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(5)),
-          padding: EdgeInsets.only(top: 20, bottom: 20, left: 40, right: 40),
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        Future.delayed(const Duration(milliseconds: 100), widget.onClick);
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: MediaQuery.of(context).size.width * 0.8,
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          gradient:
+              _isPressed
+                  ? const LinearGradient(
+                    colors: [Colors.deepPurpleAccent, Colors.purpleAccent],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                  : const LinearGradient(
+                    colors: [Color(0xFF6A1B9A), Colors.black87],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+          boxShadow:
+              _isPressed
+                  ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]
+                  : [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.35),
+                      blurRadius: 12,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+          border: Border.all(color: Colors.white.withOpacity(0.8), width: 1.3),
         ),
-        onPressed: onClick,
         child: Text(
-          title,
+          widget.title.toUpperCase(),
           style: TextStyle(
+            color: _isPressed ? Colors.white70 : Colors.white,
             fontSize: 20,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 1.2,
           ),
         ),
       ),
