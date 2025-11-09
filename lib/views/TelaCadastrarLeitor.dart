@@ -16,139 +16,267 @@ class _TelaCadastrarLeitorState extends State<TelaCadastrarLeitor> {
     "nome": TextEditingController(),
     "sobrenome": TextEditingController(),
     "telefone": TextEditingController(),
-    "endereço": TextEditingController(),
-    "data_nascimento": TextEditingController(),
+    "email": TextEditingController(),
+    "rua": TextEditingController(),
+    "bairro": TextEditingController(),
+    "cep": TextEditingController(),
+    "cidade": TextEditingController(),
+    "dataNascimento": TextEditingController(),
   };
 
   final formkeys = {
     "nome": GlobalKey<FormState>(),
     "sobrenome": GlobalKey<FormState>(),
     "telefone": GlobalKey<FormState>(),
-    "endereço": GlobalKey<FormState>(),
-    "data_nascimento": GlobalKey<FormState>(),
+    "email": GlobalKey<FormState>(),
+    "rua": GlobalKey<FormState>(),
+    "bairro": GlobalKey<FormState>(),
+    "cep": GlobalKey<FormState>(),
+    "cidade": GlobalKey<FormState>(),
+    "dataNascimento": GlobalKey<FormState>(),
   };
 
-  Widget buildSizedBox() => SizedBox(width: 10, height: 20);
+  Widget buildSizedBox() => const SizedBox(height: 20);
 
   Widget buildRowCustom(Widget firstElement, Widget secundElement) {
     return Row(
       children: [
         Expanded(child: firstElement),
-        buildSizedBox(),
+        const SizedBox(width: 10),
         Expanded(child: secundElement),
       ],
     );
   }
 
-  Widget textCustom(String data) =>
-      Text(data, style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700));
+  Widget textCustom(String data) => Text(
+    data,
+    style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w700),
+  );
 
-  bool isEmail = false;
-  bool isTelefone = true;
+  Column buildButaoSalvar() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BuildButtonNavCustom(
+              title: "Salvar",
+              onClick: () {
+                Funcs().callValidatorTextForm(formkeys, context, "/home");
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 30),
+      ],
+    );
+  }
+
+  Column buildDataNascimento() {
+    return Column(
+      children: [
+        textCustom("Data de Nascimento"),
+        const SizedBox(height: 10),
+        buildDateField(
+          label: "Data de Nascimento",
+          hint: "dd/mm/aaaa",
+          controller: controllers["dataNascimento"]!,
+          formKey: formkeys["dataNascimento"]!,
+        ),
+        buildSizedBox(),
+      ],
+    );
+  }
+
+  Column buildEndereco() {
+    return Column(
+      children: [
+        textCustom("Endereço"),
+        const SizedBox(height: 10),
+        TextFormText(
+          controller: controllers["rua"]!,
+          label: "Rua",
+          hint: "Rua Principal, nº 123",
+          prefixIcon: Icons.location_on_rounded,
+          formkey: formkeys["rua"]!,
+        ),
+        buildSizedBox(),
+        buildRowCustom(
+          TextFormText(
+            controller: controllers["bairro"]!,
+            label: "Bairro",
+            hint: "bairro",
+            prefixIcon: Icons.maps_home_work,
+            formkey: formkeys["bairro"]!,
+          ),
+          TextFormText(
+            controller: controllers["cidade"]!,
+            label: "Cidade",
+            hint: "cidade",
+            prefixIcon: Icons.location_city,
+            formkey: formkeys["cidade"]!,
+          ),
+        ),
+        buildSizedBox(),
+        TextFormText(
+          controller: controllers["cep"]!,
+          label: "CEP",
+          hint: "00000-000",
+          prefixIcon: Icons.numbers,
+          formkey: formkeys["cep"]!,
+          number: true,
+        ),
+        buildSizedBox(),
+      ],
+    );
+  }
+
+  Column buildContatoPessoais() {
+    return Column(
+      children: [
+        textCustom("Contato"),
+        const SizedBox(height: 10),
+        buildRowCustom(
+          TextFormText(
+            controller: controllers["telefone"]!,
+            label: "Telefone",
+            hint: "telefone",
+            prefixIcon: Icons.phone_android,
+            formkey: formkeys["telefone"]!,
+            number: true,
+          ),
+          TextFormText(
+            controller: controllers["email"]!,
+            label: "E-mail",
+            hint: "exemplo@email.com",
+            prefixIcon: Icons.email_outlined,
+            formkey: formkeys["email"]!,
+          ),
+        ),
+        buildSizedBox(),
+      ],
+    );
+  }
+
+  Column buildDadosPessoais() {
+    return Column(
+      children: [
+        textCustom("Dados Pessoais"),
+        const SizedBox(height: 10),
+        buildRowCustom(
+          TextFormText(
+            controller: controllers["nome"]!,
+            label: "Nome",
+            hint: "nome",
+            prefixIcon: Icons.person,
+            formkey: formkeys["nome"]!,
+          ),
+          TextFormText(
+            controller: controllers["sobrenome"]!,
+            label: "Sobrenome",
+            hint: "sobrenome",
+            prefixIcon: Icons.person_outline,
+            formkey: formkeys["sobrenome"]!,
+          ),
+        ),
+        buildSizedBox(),
+      ],
+    );
+  }
+
+  Widget buildDateField({
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+    required GlobalKey<FormState> formKey,
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormText(
+            controller: controller,
+            label: label,
+            hint: hint,
+            prefixIcon: Icons.calendar_month_outlined,
+            formkey: formKey,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.06),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: IconButton(
+            icon: const Icon(Icons.date_range_outlined),
+            onPressed: () async {
+              FocusScope.of(context).unfocus();
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100),
+                builder:
+                    (context, child) => Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: const ColorScheme.light(
+                          primary: Color(0xFF6A1B9A), // roxo principal
+                          onPrimary: Colors.white,
+                          onSurface: Colors.black,
+                        ),
+                      ),
+                      child: child!,
+                    ),
+              );
+              if (picked != null) {
+                final formatted =
+                    '${picked.day.toString().padLeft(2, '0')}/'
+                    '${picked.month.toString().padLeft(2, '0')}/'
+                    '${picked.year}';
+                setState(() => controller.text = formatted);
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCustom(title: "Cadastrar Leitor"),
+      appBar: const AppBarCustom(title: "Cadastrar Leitor"),
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30),
-              buildRowCustom(
-                TextFormText(
-                  controller: controllers["nome"],
-                  label: "Nome",
-                  hint: "nome",
-                  prefixIcon: Icons.person_sharp,
-                  formkey: formkeys["nome"],
-                ),
-                TextFormText(
-                  controller: controllers["sobrenome"],
-                  label: "Sobrenome",
-                  hint: "sobrenome",
-                  prefixIcon: Icons.person_sharp,
-                  formkey: formkeys["sobrenome"],
-                ),
-              ),
+              const SizedBox(height: 30),
 
-              // buildSizedBox(),
-              SizedBox(height: 10),
+              // --- DADOS PESSOAIS ---
+              buildDadosPessoais(),
 
-              buildRowCustom(textCustom("Endereço"), textCustom("Nascimento")),
-              SizedBox(height: 6),
+              // --- CONTATO ---
+              buildContatoPessoais(),
 
-              buildRowCustom(
-                TextFormText(
-                  controller: controllers["telefone"],
-                  label: "Rua",
-                  hint: "rua",
-                  prefixIcon: Icons.phone,
-                  formkey: formkeys["teleefone"],
-                ),
-                TextFormText(
-                  controller: controllers["endereço"],
-                  label: "Dia",
-                  hint: "dia",
-                  prefixIcon: Icons.abc,
-                  formkey: formkeys["endereço"],
-                ),
-              ),
-              buildSizedBox(),
+              // --- ENDEREÇO ---
+              buildEndereco(),
 
-              buildRowCustom(
-                TextFormText(
-                  controller: controllers["data_nacimento"],
-                  label: "Bairro",
-                  hint: "bairro",
-                  prefixIcon: Icons.navigate_next_rounded,
-                  formkey: formkeys["data_nascimento"],
-                ),
-                TextFormText(
-                  controller: controllers[""],
-                  label: "Mês",
-                  hint: "mês",
-                  prefixIcon: Icons.abc,
-                  formkey: formkeys[""],
-                ),
-              ),
+              // --- DATA DE NASCIMENTO ---
+              buildDataNascimento(),
 
-              buildSizedBox(),
-
-              buildRowCustom(
-                TextFormText(
-                  controller: controllers[""],
-                  label: "CEP",
-                  hint: "cep",
-                  prefixIcon: Icons.add_ic_call_outlined,
-                  formkey: formkeys[""],
-                ),
-                TextFormText(
-                  controller: controllers[""],
-                  label: "Ano",
-                  hint: "ano",
-                  prefixIcon: Icons.zoom_out_sharp,
-                  formkey: formkeys[""],
-                ),
-              ),
-              buildSizedBox(),
-              textCustom("Contato"),
-              TextFormText(
-                controller: controllers[""],
-                label: "Telefone",
-                hint: "telefone",
-                prefixIcon: Icons.wysiwyg_outlined,
-                formkey: formkeys[""],
-              ),
-
-              buildSizedBox(),
-              BuildButtonNavCustom(
-                title: "Salvar",
-                onClick: () {
-                  Funcs().callValidatorTextForm(formkeys, context, "/home");
-                },
-              ),
+              // --- BOTÃO SALVAR ---
+              buildButaoSalvar(),
             ],
           ),
         ),
