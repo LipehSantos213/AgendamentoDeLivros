@@ -24,7 +24,6 @@ class TextFormText extends StatefulWidget {
     this.number = false,
     this.isPassword = false,
     // this.isDate = false,
-    super.key,
   });
 
   @override
