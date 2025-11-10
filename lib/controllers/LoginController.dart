@@ -1,5 +1,7 @@
 // ignore: file_names
 // import 'package:flutter/material.dart' show TextEditingController;
+import 'package:agenda_de_livros/controllers/Funcs.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../models/UserModel.dart';
@@ -11,27 +13,67 @@ class LoginController {
     Map<String, GlobalKey<FormState>> formkeys,
     bool criarConta,
   ) {
-    print("-----LoginController-----");
-
     if (criarConta) {
-      print("Usuario esta criando uma conta !!!");
-      if (controllers.keys.last != "controllerConfirmPassword" &&
+      if (controllers.keys.last != "confirmPassword" &&
           formkeys.keys.last != "confirmPassword") {
-        controllers.addAll({
-          "controllerConfirmPassword": TextEditingController(),
-        });
+        controllers.addAll({"confirmPassword": TextEditingController()});
         formkeys.addAll({"confirmPassword": GlobalKey<FormState>()});
-        print("Adicionado !!!");
       }
     } else {
-      print("Usuario esta acessando uma conta !!!");
       String ultimoForm = formkeys.keys.last;
       String ultimoController = controllers.keys.last;
-      if (ultimoController == "controllerConfirmPassword" &&
+      if (ultimoController == "confirmPassword" &&
           ultimoForm == "confirmPassword") {
         controllers.remove(ultimoController);
         formkeys.remove(ultimoForm);
-        print("Removidos !!!");
+      }
+    }
+  }
+
+  Future<void> onClickButton(
+    bool isCreateAccount,
+    BuildContext context,
+    Map<String, TextEditingController> controllers,
+    Map<String, GlobalKey<FormState>> formkeys,
+  ) async {
+    final isCamposOk = await Funcs().callValidatorTextForm(formkeys, context);
+
+    final user = controllers["user"]!.text.trim();
+    final email = controllers["email"]!.text.trim();
+    final senha = controllers["password"]!.text.trim();
+
+    final login = UserModel(usuario: user, email: email, senha: senha);
+
+    if (isCreateAccount && isCamposOk) {
+      // Criar Conta
+      final confirmSenha = controllers["confirmPassword"]?.text.trim();
+      if (senha != confirmSenha) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("As senhas não coincidem. Tente novamente!"),
+          ),
+        );
+        return;
+      }
+
+      String result = await db.insertUser(login);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result)));
+      Navigator.popAndPushNamed(context, "/home");
+    } else {
+      // Acessar Conta
+      final isAutorizate = await db.accessAccount(login);
+      if (isAutorizate) {
+        // IR PARA A TELA PRINCIPAL -> MENU
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Seja Bem vindo de Volta ${login.usuario}')),
+        );
+        Navigator.popAndPushNamed(context, "/home");
+      } else if (!isCreateAccount && isCamposOk) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Credenciais Invalidas !!!")));
       }
     }
   }
@@ -82,14 +124,18 @@ class LoginController {
     return null;
   }
 
-  String? validationConfirmPasword(String confirmsenha, String senha) {}
+  String? validationConfirmPasword(String confirmsenha, String senha) {
+    if (confirmsenha.trim() != senha.trim()) {
+      return "Confirme sua senha novamente";
+    }
+    return null;
+  }
 
-  Future<int> addUser(UserModel login) async {
-    return await db.insertUser(login);
+  Future<String> criarConta(UserModel conta) async {
+    return await db.insertUser(conta);
   }
 
   Future<void> removeUser(int id) async {}
 
-  Future buscarLivros() async{
-  }
+  Future buscarLivros() async {}
 }
