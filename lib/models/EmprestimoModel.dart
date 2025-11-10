@@ -54,8 +54,8 @@ class EmprestimoModel {
           map["data_devolucao_efetiva"] != null
               ? DateTime.parse(map["data_devolucao_efetiva"])
               : null,
-      devolvido: (map["devolvido"] ?? 0) == 1,
-      observacoes: map["observacoes"] ?? "",
+      devolvido: map["devolvido"] == 1,
+      observacoes: map["observacoes"] ?? "Não Ha Observações Definidas",
       status: map["status"] ?? "Em andamento",
     );
   }
