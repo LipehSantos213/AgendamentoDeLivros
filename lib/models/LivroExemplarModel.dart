@@ -3,7 +3,7 @@ class LivroExemplarModel {
   final int? idLivro;
   final String isbn;
   final int numeroExemplar;
-  final String status;
+  final String status; // "Entregue" ou "Disponivel"
 
   LivroExemplarModel({
     this.id,
