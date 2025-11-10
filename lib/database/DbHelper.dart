@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:agenda_de_livros/models/LivroModel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -61,7 +62,7 @@ class DbHelper {
       id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
       isbn TEXT NOT NULL,
       numeroExemplar INTEGER NOT NULL,
-      status TEXT NOT NULL,
+      status TEXT,
       idLivro INTEGER NOT NULL,
       FOREIGN KEY (idLivro) REFERENCES livro(id)
         ON DELETE CASCADE
@@ -86,7 +87,7 @@ class DbHelper {
       livroEmprestado TEXT NOT NULL,
       dataEmprestimo TEXT NOT NULL,
       dataDevolucaoPrevista TEXT NOT NULL,
-      dataDevolucaoEfetiva TEXT NOT NULL,
+      dataDevolucaoEfetiva TEXT,
       devolvido INTEGER NOT NULL,
       obseracoes TEXT,
       status TEXT NOT NULL,
@@ -108,9 +109,61 @@ class DbHelper {
   }
 
   // CRUD
-  Future<int> insertUser(UserModel login) async {
+  Future<int> insertLivro(LivroModel livro) async {
     Database db = await instance.database;
-    return await db.insert("conta", login.toMap());
+    return await db.insert("livro", livro.toMap());
+  }
+
+  Future<List<LivroModel>> getLivros() async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> mapLivros = await db.query("livro");
+    return List.generate(
+      mapLivros.length,
+      (index) => LivroModel.fromJson(mapLivros[index]),
+    );
+  }
+
+  Future<String> insertUser(UserModel login) async {
+    final db = await instance.database;
+
+    // Verifica se o e-mail já está cadastrado
+    final existingUser = await db.query(
+      "conta",
+      where: "email = ?",
+      whereArgs: [login.email],
+    );
+
+    if (existingUser.isNotEmpty) {
+      // Retorna um código que o app pode interpretar
+      // 0 é mail duplicado
+      return "Usuario com o Email ja Cadastrado";
+    }
+
+    // Insere o usuário com segurança
+    await db.insert(
+      "conta",
+      login.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.abort,
+    );
+    return "Usuario criado com sucesso !!!";
+  }
+
+  Future<bool> accessAccount(UserModel login) async {
+    final db = await instance.database;
+    final existingUser = await db.query(
+      "conta",
+      where: "usuario = ? AND email = ? AND senha = ?",
+      whereArgs: [login.usuario, login.email, login.senha],
+    );
+    if (existingUser.isNotEmpty) {
+      // Usuario existente
+      return true;
+      // return "Seja Bem vindo de Volta ${login.usuario}";
+    } else {
+      // Usuario invalido
+      return false;
+      // return "Credenciais Invalidas !!!";
+    }
   }
 
   Future<List<UserModel>> getUsers() async {
