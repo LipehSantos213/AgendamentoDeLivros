@@ -12,9 +12,9 @@ class TelaDeLogin extends StatefulWidget {
 
 class _TelaDeLoginState extends State<TelaDeLogin> {
   final controllers = {
-    "controllerUser": TextEditingController(),
-    "controllerEmail": TextEditingController(),
-    "controllerPassword": TextEditingController(),
+    "user": TextEditingController(),
+    "email": TextEditingController(),
+    "password": TextEditingController(),
   };
 
   final formkeys = {
@@ -106,7 +106,13 @@ class _TelaDeLoginState extends State<TelaDeLogin> {
 
   Widget buildButton() {
     return GestureDetector(
-      onTap: () => Funcs().callValidatorTextForm(formkeys, context, "/home"),
+      onTap:
+          () => controller.onClickButton(
+            _valueCreateAccount,
+            context,
+            controllers,
+            formkeys,
+          ),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         width: double.infinity,
@@ -180,7 +186,7 @@ class _TelaDeLoginState extends State<TelaDeLogin> {
 
                     // Campos
                     TextFormText(
-                      controller: controllers["controllerUser"]!,
+                      controller: controllers["user"]!,
                       label: "Usuário",
                       hint: "Digite seu usuário",
                       prefixIcon: Icons.person_outline,
@@ -188,7 +194,7 @@ class _TelaDeLoginState extends State<TelaDeLogin> {
                     ),
                     buildSizedBox(),
                     TextFormText(
-                      controller: controllers["controllerEmail"]!,
+                      controller: controllers["email"]!,
                       label: "Email",
                       hint: "Digite seu email",
                       prefixIcon: Icons.email_outlined,
@@ -196,7 +202,7 @@ class _TelaDeLoginState extends State<TelaDeLogin> {
                     ),
                     buildSizedBox(),
                     TextFormText(
-                      controller: controllers["controllerPassword"]!,
+                      controller: controllers["password"]!,
                       label: "Senha",
                       hint: "Digite sua senha",
                       prefixIcon: Icons.lock_outline,
@@ -206,7 +212,7 @@ class _TelaDeLoginState extends State<TelaDeLogin> {
                     if (_valueCreateAccount) ...[
                       buildSizedBox(),
                       TextFormText(
-                        controller: controllers["controllerConfirmPassword"]!,
+                        controller: controllers["confirmPassword"]!,
                         label: "Confirmar Senha",
                         hint: "Repita sua senha",
                         prefixIcon: Icons.lock,
