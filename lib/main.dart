@@ -1,3 +1,4 @@
+import 'package:agenda_de_livros/AppLifecycleReactor.dart';
 import 'package:agenda_de_livros/views/TelaCadastrarLeitor.dart';
 import 'package:agenda_de_livros/views/TelaCatalogarLivro.dart';
 import 'package:agenda_de_livros/views/TelaConsultarLeitor.dart';
@@ -9,7 +10,7 @@ import 'package:agenda_de_livros/views/TelaVerBiblioteca.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(AppLifecycleReactor(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
