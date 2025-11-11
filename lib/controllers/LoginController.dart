@@ -60,7 +60,9 @@ class LoginController {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(result)));
-      Navigator.popAndPushNamed(context, "/home");
+      if (result != "Usuario com o Email ja Cadastrado") {
+        Navigator.popAndPushNamed(context, "/home");
+      }
     } else {
       // Acessar Conta
       final isAutorizate = await db.accessAccount(login);

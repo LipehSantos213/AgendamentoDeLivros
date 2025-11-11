@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:agenda_de_livros/models/LivroModel.dart';
+import 'package:agenda_de_livros/models/UserAtualModel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -39,8 +40,17 @@ class DbHelper {
       email TEXT NOT NULL,
       senha TEXT NOT NULL
     );
+    CREATE TABLE conta_atual (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  idConta INTEGER NOT NULL,
+  usuario TEXT NOT NULL,
+  email TEXT NOT NULL,
+  FOREIGN KEY (idConta) REFERENCES conta(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
     CREATE TABLE livro (
-      idLivro INTEGER PRIMARY KEY AUTOINCREMENT
+      idLivro INTEGER PRIMARY KEY AUTOINCREMENT,
       titulo TEXT NOT NULL,
       autor TEXT NOT NULL,
       palavraChave TEXT,
@@ -79,7 +89,7 @@ class DbHelper {
       bairro TEXT NOT NULL,
       cep TEXT NOT NULL,
       cidade TEXT NOT NULL,
-      dataNascimento TEXT NOT NULL,
+      dataNascimento TEXT NOT NULL
     );
     CREATE TABLE emprestimo (
       id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -95,7 +105,7 @@ class DbHelper {
       idLeitor INTEGER NOT NULL,  
       FOREIGN KEY (idExemplar) REFERENCES livroExemplar(id)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
       FOREIGN KEY (idLeitor) REFERENCES leitor(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
@@ -109,6 +119,49 @@ class DbHelper {
   }
 
   // CRUD
+  Future<void> setContaAtual(UserModel user) async {
+    final db = await instance.database;
+
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS conta_atual (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      idConta INTEGER NOT NULL,
+      usuario TEXT NOT NULL,
+      email TEXT NOT NULL,
+      FOREIGN KEY (idConta) REFERENCES conta(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+    )
+  ''');
+    
+    // Limpa a tabela (só deve haver 1 conta logada por vez)
+    await db.delete('conta_atual');
+
+    // Insere o usuário atual
+    await db.insert('conta_atual', {
+      'idConta': user.id,
+      'usuario': user.usuario,
+      'email': user.email,
+    });
+  }
+
+  Future<UserAtualModel?> getContaAtual() async {
+    final db = await instance.database;
+    final result = await db.query('conta_atual');
+
+    if (result.isNotEmpty) {
+      final map = result.first;
+      final user = UserAtualModel.fromJson(map);
+      return user;
+    }
+    return null;
+  }
+
+  Future<void> logout() async {
+    final db = await instance.database;
+    await db.delete('conta_atual');
+  }
+
   Future<int> insertLivro(LivroModel livro) async {
     Database db = await instance.database;
     return await db.insert("livro", livro.toMap());
@@ -145,6 +198,15 @@ class DbHelper {
       login.toMap(),
       conflictAlgorithm: ConflictAlgorithm.abort,
     );
+
+    final userMap = await db.query(
+      "conta",
+      where: "usuario = ? AND email = ? AND senha = ?",
+      whereArgs: [login.usuario, login.email, login.senha],
+    );
+
+    final user = UserModel.fromJson(userMap.first);
+    await setContaAtual(user);
     return "Usuario criado com sucesso !!!";
   }
 
@@ -157,6 +219,9 @@ class DbHelper {
     );
     if (existingUser.isNotEmpty) {
       // Usuario existente
+      final userMap = existingUser.first;
+      final user = UserModel.fromJson(userMap);
+      await setContaAtual(user);
       return true;
       // return "Seja Bem vindo de Volta ${login.usuario}";
     } else {
