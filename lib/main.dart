@@ -15,11 +15,18 @@ void main() async {
 
   // Inicializa o banco de dados ANTES de rodar o app
   await DbHelper.instance.database;
-  runApp(AppLifecycleReactor(child: MyApp()));
+
+  final userAtual = await DbHelper.instance.getContaAtual();
+  runApp(
+    AppLifecycleReactor(
+      child: MyApp(initialRoute: userAtual != null ? "/home" : "/login"),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+  const MyApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +49,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: "/login",
+      initialRoute: initialRoute,
       routes: routes,
     );
   }
