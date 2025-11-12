@@ -1,4 +1,5 @@
 import 'package:agenda_de_livros/AppLifecycleReactor.dart';
+import 'package:agenda_de_livros/database/DbHelper.dart';
 import 'package:agenda_de_livros/views/TelaCadastrarLeitor.dart';
 import 'package:agenda_de_livros/views/TelaCatalogarLivro.dart';
 import 'package:agenda_de_livros/views/TelaConsultarLeitor.dart';
@@ -9,7 +10,11 @@ import 'package:agenda_de_livros/views/TelaCadastrarLivro.dart';
 import 'package:agenda_de_livros/views/TelaVerBiblioteca.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializa o banco de dados ANTES de rodar o app
+  await DbHelper.instance.database;
   runApp(AppLifecycleReactor(child: MyApp()));
 }
 
