@@ -1,6 +1,7 @@
 // ignore: file_names
 // import 'package:flutter/material.dart' show TextEditingController;
 import 'package:agenda_de_livros/controllers/Funcs.dart';
+import 'package:agenda_de_livros/models/UserAtualModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -81,6 +82,7 @@ class LoginController {
   }
 
   final db = DbHelper.privateConstrutor();
+
   String? validationUserName(String username) {
     if (username.length > 40) {
       return "nome de usuario muito grande";
@@ -135,6 +137,11 @@ class LoginController {
 
   Future<String> criarConta(UserModel conta) async {
     return await db.insertUser(conta);
+  }
+
+  Future<int?> pegarIdUsuario() async {
+    final UserAtualModel? user = await db.getContaAtual();
+    return user!.idConta;
   }
 
   Future<void> removeUser(int id) async {}
